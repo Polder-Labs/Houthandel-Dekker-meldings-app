@@ -8,6 +8,7 @@ const ASSETS = [
     './',
     './index.html',
     './css/style.css',
+    './js/msal-browser.min.js',
     './js/auth.js',
     './js/app.js',
     './manifest.json',
