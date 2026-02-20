@@ -39,6 +39,9 @@ async function initAuth() {
     try {
         msalInstance = new msal.PublicClientApplication(msalConfig);
         
+        // MSAL 2.x requires initialize() before any other calls
+        await msalInstance.initialize();
+        
         // Handle redirect response (after login redirect)
         const response = await msalInstance.handleRedirectPromise();
         if (response) {
