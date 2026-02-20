@@ -9,8 +9,8 @@ const msalConfig = {
     auth: {
         clientId: "78ede6bb-58a2-481f-94b4-3eafa89be166",       // Application (client) ID from Entra ID
         authority: "https://login.microsoftonline.com/3c27c8d3-c979-401c-8763-a4bf501815ff", // Your M365 tenant
-        redirectUri: window.location.origin + "/demohoutveilig/",    // Subpath on polder-labs.nl
-        postLogoutRedirectUri: window.location.origin + "/demohoutveilig/"
+        redirectUri: window.location.origin,    // Auto-detected from hosting URL
+        postLogoutRedirectUri: window.location.origin
     },
     cache: {
         cacheLocation: "localStorage",
