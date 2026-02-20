@@ -3,17 +3,18 @@
    Voor offline functionaliteit (PWA)
    ============================================ */
 
-const CACHE_NAME = 'houtveilig-v2';
+const CACHE_NAME = 'houtveilig-v3';
+const BASE_PATH = '/demohoutveilig/';
 const ASSETS = [
-    './',
-    './index.html',
-    './css/style.css',
-    './js/msal-browser.min.js',
-    './js/auth.js',
-    './js/app.js',
-    './manifest.json',
-    './icons/icon-192.png',
-    './icons/icon-512.png'
+    BASE_PATH,
+    BASE_PATH + 'index.html',
+    BASE_PATH + 'css/style.css',
+    BASE_PATH + 'js/msal-browser.min.js',
+    BASE_PATH + 'js/auth.js',
+    BASE_PATH + 'js/app.js',
+    BASE_PATH + 'manifest.json',
+    BASE_PATH + 'icons/icon-192.png',
+    BASE_PATH + 'icons/icon-512.png'
 ];
 
 // Installatie - Cache alle bestanden

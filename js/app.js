@@ -679,7 +679,7 @@ function escapeHtml(text) {
 // === Service Worker Registratie ===
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('/demohoutveilig/sw.js', { scope: '/demohoutveilig/' })
             .then(reg => console.log('Service Worker geregistreerd:', reg.scope))
             .catch(err => console.log('Service Worker registratie mislukt:', err));
     });

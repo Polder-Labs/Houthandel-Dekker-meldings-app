@@ -1,0 +1,35 @@
+name: Deploy to Hostinger (polder-labs.nl)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: FTP Deploy to Hostinger
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/demohoutveilig/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .gitignore
+            .github/**
+            staticwebapp.config.json
+            server.py
+            start-online.bat
+            generate_icons.py
+            generate-icons.html
+            tunnel-output.txt
+            cloudflared.exe
+            README.md
