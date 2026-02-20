@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HoutVeilig">
+    <meta name="description" content="Meldingsapp voor gevaarlijke situaties en schades in de houtbranche">
+    
+    <title>HoutVeilig - Meldingsapp</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-icon">🌲</div>
+            <h1>HoutVeilig</h1>
+            <p>Meldingsapp Houtbranche</p>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-logo">🌲</div>
+                <div class="header-text">
+                    <h1>HoutVeilig</h1>
+                    <span class="header-subtitle">Meldingsapp Houtbranche</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="nieuwe-melding">
+                <span class="tab-icon">📝</span>
+                <span class="tab-label">Nieuwe Melding</span>
+            </button>
+            <button class="tab-btn" data-tab="meldingen-overzicht">
+                <span class="tab-icon">📋</span>
+                <span class="tab-label">Overzicht</span>
+            </button>
+        </nav>
+
+        <!-- Tab: Nieuwe Melding -->
+        <main id="tab-nieuwe-melding" class="tab-content active">
+            <form id="melding-form" class="melding-form">
+                
+                <!-- Stap 1: Type melding -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-number">1</span>
+                        Type Melding
+                    </h2>
+                    <div class="melding-type-grid">
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="gevaarlijke-situatie" required>
+                            <div class="type-card-content">
+                                <span class="type-icon">⚠️</span>
+                                <span class="type-label">Gevaarlijke Situatie</span>
+                            </div>
+                        </label>
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="schade">
+                            <div class="type-card-content">
+                                <span class="type-icon">🔨</span>
+                                <span class="type-label">Schade</span>
+                            </div>
+                        </label>
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="bijna-ongeval">
+                            <div class="type-card-content">
+                                <span class="type-icon">🚨</span>
+                                <span class="type-label">Bijna Ongeval</span>
+                            </div>
+                        </label>
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="onveilige-handeling">
+                            <div class="type-card-content">
+                                <span class="type-icon">🖐️</span>
+                                <span class="type-label">Onveilige Handeling</span>
+                            </div>
+                        </label>
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="defect-materiaal">
+                            <div class="type-card-content">
+                                <span class="type-icon">🔧</span>
+                                <span class="type-label">Defect Materiaal</span>
+                            </div>
+                        </label>
+                        <label class="type-card">
+                            <input type="radio" name="meldingType" value="overig">
+                            <div class="type-card-content">
+                                <span class="type-icon">📌</span>
+                                <span class="type-label">Overig</span>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Stap 2: Foto's -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-number">2</span>
+                        Foto's maken
+                    </h2>
+                    <div class="foto-section">
+                        <div id="foto-preview" class="foto-preview-grid"></div>
+                        <div class="foto-buttons">
+                            <button type="button" id="btn-camera" class="btn btn-camera">
+                                <span class="btn-icon">📷</span>
+                                Foto nemen
+                            </button>
+                            <button type="button" id="btn-gallery" class="btn btn-gallery">
+                                <span class="btn-icon">🖼️</span>
+                                Uit galerij
+                            </button>
+                        </div>
+                        <input type="file" id="camera-input" accept="image/*" capture="environment" multiple style="display:none">
+                        <input type="file" id="gallery-input" accept="image/*" multiple style="display:none">
+                        <p class="foto-hint">Maximaal 5 foto's. Tik op een foto om te verwijderen.</p>
+                    </div>
+                </section>
+
+                <!-- Stap 3: Beschrijving -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-number">3</span>
+                        Beschrijving
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="melder-naam" class="form-label">Uw naam</label>
+                        <input type="text" id="melder-naam" class="form-input" placeholder="Vul uw naam in" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locatie-beschrijving" class="form-label">Locatie omschrijving</label>
+                        <input type="text" id="locatie-beschrijving" class="form-input" placeholder="Bijv. Hal 3, bij zaagmachine 2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prioriteit" class="form-label">Prioriteit</label>
+                        <select id="prioriteit" class="form-select" required>
+                            <option value="">Selecteer prioriteit...</option>
+                            <option value="laag">🟢 Laag - Geen direct gevaar</option>
+                            <option value="middel">🟡 Middel - Aandacht vereist</option>
+                            <option value="hoog">🟠 Hoog - Snel actie nodig</option>
+                            <option value="kritiek">🔴 Kritiek - Direct gevaar!</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="beschrijving" class="form-label">Beschrijving van de situatie</label>
+                        <textarea id="beschrijving" class="form-textarea" rows="4" 
+                            placeholder="Beschrijf kort wat u heeft aangetroffen. Wat is het probleem? Wat is het risico?" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actie-genomen" class="form-label">Actie al ondernomen? (optioneel)</label>
+                        <textarea id="actie-genomen" class="form-textarea" rows="2" 
+                            placeholder="Beschrijf eventuele acties die u al heeft ondernomen"></textarea>
+                    </div>
+                </section>
+
+                <!-- Stap 4: Locatie -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-number">4</span>
+                        GPS Locatie
+                    </h2>
+                    <div class="locatie-section">
+                        <div id="locatie-status" class="locatie-status">
+                            <span class="locatie-icon">📍</span>
+                            <span class="locatie-text">Locatie wordt opgehaald...</span>
+                        </div>
+                        <div id="locatie-info" class="locatie-info hidden">
+                            <div class="locatie-detail">
+                                <span class="detail-label">Breedtegraad:</span>
+                                <span id="lat-value" class="detail-value">-</span>
+                            </div>
+                            <div class="locatie-detail">
+                                <span class="detail-label">Lengtegraad:</span>
+                                <span id="lng-value" class="detail-value">-</span>
+                            </div>
+                            <div class="locatie-detail">
+                                <span class="detail-label">Nauwkeurigheid:</span>
+                                <span id="accuracy-value" class="detail-value">-</span>
+                            </div>
+                            <a id="maps-link" href="#" target="_blank" class="btn btn-maps">
+                                <span class="btn-icon">🗺️</span>
+                                Bekijk op kaart
+                            </a>
+                        </div>
+                        <button type="button" id="btn-locatie" class="btn btn-locatie">
+                            <span class="btn-icon">🔄</span>
+                            Locatie vernieuwen
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Stap 5: Verzenden -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-number">5</span>
+                        Verzenden
+                    </h2>
+                    <div class="form-group">
+                        <label for="email-ontvanger" class="form-label">E-mail ontvanger</label>
+                        <input type="email" id="email-ontvanger" class="form-input" 
+                            placeholder="veiligheid@bedrijf.nl" required>
+                        <p class="form-hint">Het e-mailadres waar de melding naartoe wordt gestuurd</p>
+                    </div>
+                    
+                    <div class="verzend-buttons">
+                        <button type="submit" id="btn-verzend-email" class="btn btn-primary btn-large">
+                            <span class="btn-icon">📧</span>
+                            Melding Verzenden via E-mail
+                        </button>
+                        <button type="button" id="btn-opslaan" class="btn btn-secondary">
+                            <span class="btn-icon">💾</span>
+                            Lokaal Opslaan
+                        </button>
+                    </div>
+                </section>
+            </form>
+        </main>
+
+        <!-- Tab: Overzicht -->
+        <main id="tab-meldingen-overzicht" class="tab-content">
+            <div class="overzicht-header">
+                <h2>Opgeslagen Meldingen</h2>
+                <button id="btn-clear-meldingen" class="btn btn-danger btn-small">
+                    <span class="btn-icon">🗑️</span>
+                    Alles wissen
+                </button>
+            </div>
+            <div id="meldingen-lijst" class="meldingen-lijst">
+                <div class="empty-state">
+                    <span class="empty-icon">📋</span>
+                    <p>Nog geen opgeslagen meldingen</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden">
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
