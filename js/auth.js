@@ -18,7 +18,7 @@ const msalConfig = {
     },
     system: {
         loggerOptions: {
-            logLevel: msal.LogLevel ? msal.LogLevel.Warning : 3
+            logLevel: (typeof msal !== 'undefined' && msal.LogLevel) ? msal.LogLevel.Warning : 3
         }
     }
 };
@@ -59,6 +59,8 @@ async function initAuth() {
     } catch (error) {
         console.error("MSAL initialization error:", error);
         showAuthError(error);
+        // Still show the login screen so the user isn't stuck on splash
+        updateAuthUI();
         return null;
     }
 }
@@ -77,6 +79,10 @@ async function signIn() {
         const response = await msalInstance.loginPopup(loginRequest);
         currentAccount = response.account;
         updateAuthUI();
+        // Initialize the app after successful login
+        if (typeof initApp === 'function') {
+            initApp();
+        }
     } catch (error) {
         if (error instanceof msal.BrowserAuthError && 
             (error.errorCode === "popup_window_error" || error.errorCode === "user_cancelled")) {
