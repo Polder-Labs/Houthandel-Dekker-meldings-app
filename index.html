@@ -15,6 +15,9 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- MSAL.js 2.x for Microsoft 365 SSO -->
+    <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
 </head>
 <body>
     <!-- Splash Screen -->
@@ -27,6 +30,29 @@
         </div>
     </div>
 
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen hidden">
+        <div class="login-content">
+            <div class="login-logo">🌲</div>
+            <h1>HoutVeilig</h1>
+            <p class="login-subtitle">Meldingsapp Houtbranche</p>
+            <p class="login-description">Log in met uw Microsoft 365 account om door te gaan.</p>
+            <button id="btn-login" class="btn btn-login" onclick="signIn()">
+                <svg class="ms-logo" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                    <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                    <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                    <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                </svg>
+                Inloggen met Microsoft
+            </button>
+            <div id="auth-error" class="auth-error hidden">
+                <span class="auth-error-icon">⚠️</span>
+                <span id="auth-error-message"></span>
+            </div>
+        </div>
+    </div>
+
     <!-- Main App -->
     <div id="app" class="app hidden">
         <!-- Header -->
@@ -36,6 +62,15 @@
                 <div class="header-text">
                     <h1>HoutVeilig</h1>
                     <span class="header-subtitle">Meldingsapp Houtbranche</span>
+                </div>
+                <div class="header-user">
+                    <div class="user-info">
+                        <span id="user-display-name" class="user-name"></span>
+                        <span id="user-email" class="user-email"></span>
+                    </div>
+                    <button id="btn-logout" class="btn-logout" onclick="signOut()" title="Uitloggen">
+                        🚪
+                    </button>
                 </div>
             </div>
         </header>
@@ -259,6 +294,7 @@
         </div>
     </div>
 
+    <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

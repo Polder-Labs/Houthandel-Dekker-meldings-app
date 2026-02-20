@@ -16,22 +16,37 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
 // === Initialization ===
-document.addEventListener('DOMContentLoaded', () => {
-    initApp();
+document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize Microsoft 365 SSO first
+    if (typeof initAuth === 'function') {
+        const account = await initAuth();
+        if (account) {
+            // User is authenticated, initialize the app
+            initApp();
+        }
+        // If not authenticated, login screen is shown by auth.js
+    } else {
+        // Auth module not loaded (e.g., local dev without MSAL)
+        // Show app directly
+        initApp();
+    }
 });
 
 function initApp() {
     // Laad opgeslagen gegevens
     laadOpgeslagenGegevens();
     
-    // Splash screen verbergen
-    setTimeout(() => {
-        $('#splash-screen').classList.add('fade-out');
-        $('#app').classList.remove('hidden');
+    // Splash screen verbergen (skip if auth already handled it)
+    const splashScreen = $('#splash-screen');
+    if (splashScreen && splashScreen.style.display !== 'none') {
         setTimeout(() => {
-            $('#splash-screen').style.display = 'none';
-        }, 500);
-    }, 1500);
+            splashScreen.classList.add('fade-out');
+            $('#app').classList.remove('hidden');
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 500);
+        }, 800);
+    }
 
     // Event Listeners
     initTabNavigatie();
@@ -40,10 +55,14 @@ function initApp() {
     initLocatie();
     initOverzicht();
     
-    // Laad opgeslagen naam als die er is
-    const opgeslagenNaam = localStorage.getItem('houtveilig-naam');
-    if (opgeslagenNaam) {
-        $('#melder-naam').value = opgeslagenNaam;
+    // Pre-fill name from SSO if available, otherwise from localStorage
+    if (typeof getUserDisplayName === 'function' && getUserDisplayName()) {
+        $('#melder-naam').value = getUserDisplayName();
+    } else {
+        const opgeslagenNaam = localStorage.getItem('houtveilig-naam');
+        if (opgeslagenNaam) {
+            $('#melder-naam').value = opgeslagenNaam;
+        }
     }
     
     // Laad opgeslagen e-mail als die er is

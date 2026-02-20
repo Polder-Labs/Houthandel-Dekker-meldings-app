@@ -1,0 +1,16 @@
+{
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": ["/css/*", "/js/*", "/icons/*", "/manifest.json", "/sw.js"]
+    },
+    "globalHeaders": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(self), geolocation=(self)"
+    },
+    "mimeTypes": {
+        ".json": "application/json",
+        ".webmanifest": "application/manifest+json"
+    }
+}

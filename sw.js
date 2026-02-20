@@ -3,11 +3,12 @@
    Voor offline functionaliteit (PWA)
    ============================================ */
 
-const CACHE_NAME = 'houtveilig-v1';
+const CACHE_NAME = 'houtveilig-v2';
 const ASSETS = [
     './',
     './index.html',
     './css/style.css',
+    './js/auth.js',
     './js/app.js',
     './manifest.json',
     './icons/icon-192.png',
