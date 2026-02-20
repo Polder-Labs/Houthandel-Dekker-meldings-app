@@ -55,6 +55,12 @@ async function initAuth() {
         }
         
         updateAuthUI();
+        
+        // If authenticated after redirect, initialize the app
+        if (currentAccount && typeof initApp === 'function') {
+            initApp();
+        }
+        
         return currentAccount;
     } catch (error) {
         console.error("MSAL initialization error:", error);
@@ -69,33 +75,33 @@ async function initAuth() {
  * Sign in with Microsoft 365
  */
 async function signIn() {
+    const authErrorEl = document.getElementById('auth-error');
+    const authErrorMsg = document.getElementById('auth-error-message');
+    
+    // If MSAL failed to initialize, try again
     if (!msalInstance) {
-        console.error("MSAL not initialized");
-        return;
+        console.log("MSAL not initialized, trying to initialize...");
+        try {
+            msalInstance = new msal.PublicClientApplication(msalConfig);
+            await msalInstance.initialize();
+        } catch (error) {
+            console.error("MSAL re-init failed:", error);
+            if (authErrorEl && authErrorMsg) {
+                authErrorMsg.textContent = 'Authenticatie kon niet worden gestart: ' + (error.message || error);
+                authErrorEl.classList.remove('hidden');
+            }
+            return;
+        }
     }
     
     try {
-        // Try popup first, fallback to redirect
-        const response = await msalInstance.loginPopup(loginRequest);
-        currentAccount = response.account;
-        updateAuthUI();
-        // Initialize the app after successful login
-        if (typeof initApp === 'function') {
-            initApp();
-        }
+        // Use redirect flow (more reliable, works on mobile/PWA, avoids popup blockers)
+        await msalInstance.loginRedirect(loginRequest);
     } catch (error) {
-        if (error instanceof msal.BrowserAuthError && 
-            (error.errorCode === "popup_window_error" || error.errorCode === "user_cancelled")) {
-            // Popup blocked or cancelled, try redirect
-            try {
-                await msalInstance.loginRedirect(loginRequest);
-            } catch (redirectError) {
-                console.error("Login redirect error:", redirectError);
-                showAuthError(redirectError);
-            }
-        } else {
-            console.error("Login error:", error);
-            showAuthError(error);
+        console.error("Login redirect error:", error);
+        if (authErrorEl && authErrorMsg) {
+            authErrorMsg.textContent = 'Inloggen mislukt: ' + (error.message || error);
+            authErrorEl.classList.remove('hidden');
         }
     }
 }
